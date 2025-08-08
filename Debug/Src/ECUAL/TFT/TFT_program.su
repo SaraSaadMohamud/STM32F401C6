@@ -1,0 +1,5 @@
+TFT_program.c:16:18:TFT_INI	24	static
+TFT_program.c:43:18:TFT_SEND_COMMAND	24	static
+TFT_program.c:61:18:TFT_SEND_Data	24	static
+TFT_program.c:79:18:TFT_IMAGE_DISPLAY	32	static
+TFT_program.c:115:18:TFT_RESET_FUN	24	static

@@ -1,0 +1,9 @@
+NVIC_program.c:16:18:NVIC_EnableIRQ	24	static
+NVIC_program.c:31:18:NVIC_DisableIRQ	24	static
+NVIC_program.c:46:18:NVIC_SetPendingIRQ	24	static
+NVIC_program.c:61:18:NVIC_ClearPendingIRQ	24	static
+NVIC_program.c:77:18:NVIC_GetPendingIRQ	24	static
+NVIC_program.c:93:18:NVIC_GetActiveIRQ	24	static
+NVIC_program.c:109:18:NVIC_SetPriority	24	static
+NVIC_program.c:126:18:NVIC_GetPriority	24	static
+NVIC_program.c:143:18:NVIC_Set_GLOBALPriority	24	static

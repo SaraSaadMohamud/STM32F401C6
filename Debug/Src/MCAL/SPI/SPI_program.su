@@ -1,0 +1,10 @@
+SPI_program.c:25:19:SPI_MASTER_INT	24	static
+SPI_program.c:63:19:SPI_SLAVE_INT	24	static
+SPI_program.c:98:19:SPI_TRANSCIVE	24	static
+SPI_program.c:140:21:GET_HANDLER	24	static
+SPI_program.c:167:26:SPI_CLOCK_ENABLE	24	static
+SPI_program.c:195:26:SPI_DATA_TRNSIEVE_SIZE	24	static
+SPI_program.c:213:25:SPI_CLOCK_CONFIGURATION	24	static
+SPI_program.c:238:25:SPI_DATA_TRANSCIVE_DIRECTION	24	static
+SPI_program.c:256:25:SPI_MASTER_CONTROL	24	static
+SPI_program.c:275:25:SPI_FRAME_FORMATE	24	static

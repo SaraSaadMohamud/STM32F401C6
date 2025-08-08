@@ -1,0 +1,16 @@
+Src/MCAL/SYSTEM_CTRL/SYS_CTRL_program.o: \
+ ../Src/MCAL/SYSTEM_CTRL/SYS_CTRL_program.c \
+ ../Inc/MACL/SESTEM_CTRL/SYS_CTRL_interface.h \
+ ../Inc/MACL/SESTEM_CTRL/../STD_TYPES.h ../Inc/MACL/SESTEM_CTRL/../MATH.h \
+ ../Inc/MACL/SESTEM_CTRL/SYS_CTRL_config.h \
+ ../Inc/MACL/SESTEM_CTRL/SYS_CTRL_private.h
+
+../Inc/MACL/SESTEM_CTRL/SYS_CTRL_interface.h:
+
+../Inc/MACL/SESTEM_CTRL/../STD_TYPES.h:
+
+../Inc/MACL/SESTEM_CTRL/../MATH.h:
+
+../Inc/MACL/SESTEM_CTRL/SYS_CTRL_config.h:
+
+../Inc/MACL/SESTEM_CTRL/SYS_CTRL_private.h:

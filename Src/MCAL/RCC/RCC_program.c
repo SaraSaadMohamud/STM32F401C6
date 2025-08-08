@@ -1,0 +1,544 @@
+ /*
+ *******************************************************************************
+ * @file           : RCC.c
+ * @author         : SARA SAAD MAHMOUD
+ * @brief          : RCC Peripheral SOURCE file
+ ******************************************************************************
+*/
+
+/************************************* INCLUDE START ***********************************************************/
+#include <MACL/RCC/RCC_interface.h>
+/************************************* INCLUDE START ***********************************************************/
+
+/*********************************** FUNCTION PRPTOTYPE START  ***********************************************************/
+static STD_RETURN_TYPES RCC_HSI_INTIALIZE(void);
+static STD_RETURN_TYPES RCC_HSE_INTIALIZE(void);
+static STD_RETURN_TYPES RCC_PLL_INTIALIZE(void);
+
+static STD_RETURN_TYPES RCC_AHB1_PHERIPHERAL_ENABLE(uint32 _PERIPHERAL);
+static STD_RETURN_TYPES RCC_AHB2_PHERIPHERAL_ENABLE(uint32 _PERIPHERAL);
+static STD_RETURN_TYPES RCC_APB1_PHERIPHERAL_ENABLE(uint32 _PERIPHERAL);
+static STD_RETURN_TYPES RCC_APB2_PHERIPHERAL_ENABLE(uint32 _PERIPHERAL);
+
+static STD_RETURN_TYPES RCC_AHB1_PHERIPHERAL_DISABLE(uint32 _PERIPHERAL);
+static STD_RETURN_TYPES RCC_AHB2_PHERIPHERAL_DISABLE(uint32 _PERIPHERAL);
+static STD_RETURN_TYPES RCC_APB1_PHERIPHERAL_DISABLE(uint32 _PERIPHERAL);
+static STD_RETURN_TYPES RCC_APB2_PHERIPHERAL_DISABLE(uint32 _PERIPHERAL);
+
+/************************************* FUNCTION PRPTOTYPE END  ***********************************************************/
+
+
+/*********************************** FUNCTION DEFINATION START  ***********************************************************/
+
+STD_RETURN_TYPES RCC_INTIALIZE(void)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	#if RCC_CLK_SRC ==  HSI_CLK_SRC
+		RET = RCC_HSI_INTIALIZE();
+	#elif RCC_CLK_SRC ==  HSE_CLK_SRC
+				RET = RCC_HSE_INTIALIZE();
+	#elif RCC_CLK_SRC ==  PLL_CLK_SRC
+				RCC_PLL_INTIALIZE();
+	#else
+				RET = E_NOK;
+	#endif
+
+	return(RET);
+}
+
+STD_RETURN_TYPES RCC_PERIPHERAL_ENABLE(RCC_BUSS _BUSS,uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	switch(_BUSS)
+	{
+		case AHB1:
+			RET = RCC_AHB1_PHERIPHERAL_ENABLE(_PERIPHERAL);
+			break;
+
+		case AHB2:
+			RET = RCC_AHB2_PHERIPHERAL_ENABLE(_PERIPHERAL);
+			break;
+
+		case APB1:
+			RET = RCC_APB1_PHERIPHERAL_ENABLE(_PERIPHERAL);
+			break;
+
+		case APB2:
+			RET = RCC_APB2_PHERIPHERAL_ENABLE(_PERIPHERAL);
+			break;
+
+		default:
+			RET = E_NOK;
+			break;
+	}
+	return(RET);
+}
+
+STD_RETURN_TYPES RCC_PERIPHERAL_DISABLE(RCC_BUSS _BUSS,uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	switch(_BUSS)
+	{
+		case AHB1:
+			RET = RCC_AHB1_PHERIPHERAL_DISABLE(_PERIPHERAL);
+			break;
+
+		case AHB2:
+			RET = RCC_AHB2_PHERIPHERAL_DISABLE(_PERIPHERAL);
+			break;
+
+		case APB1:
+			RET = RCC_APB1_PHERIPHERAL_DISABLE(_PERIPHERAL);
+			break;
+
+		case APB2:
+			RET = RCC_APB2_PHERIPHERAL_DISABLE(_PERIPHERAL);
+			break;
+
+		default:
+			RET = E_NOK;
+			break;
+	}
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_AHB1_PHERIPHERAL_ENABLE(uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	switch(_PERIPHERAL)
+	{
+		case GPIOA_PERIPHERAL:
+			RET = GPIOA_PERIPHERAL_ENABLE();
+			break;
+
+		case GPIOB_PERIPHERAL:
+			RET = GPIOB_PERIPHERAL_ENABLE();
+			break;
+
+		case GPIOC_PERIPHERAL:
+			RET = GPIOC_PERIPHERAL_ENABLE();
+			break;
+
+		case GPIOD_PERIPHERAL:
+			RET = GPIOD_PERIPHERAL_ENABLE();
+			break;
+
+		case GPIOE_PERIPHERAL:
+			RET = GPIOE_PERIPHERAL_ENABLE();
+			break;
+
+		case GPIOH_PERIPHERAL:
+			RET = GPIOH_PERIPHERAL_ENABLE();
+			break;
+
+		case CRC_PERIPHERAL:
+			RET = CRC_PERIPHERAL_ENABLE();
+			break;
+
+		case DMA1_PERIPHERAL:
+			RET = DMA1_PERIPHERAL_ENABLE();
+			break;
+
+		case DMA2_PERIPHERAL:
+			RET = DMA2_PERIPHERAL_ENABLE();
+			break;
+
+		default:
+			RET = E_NOK;
+			break;
+	}
+
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_AHB2_PHERIPHERAL_ENABLE(uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+	RET = OTGFS_PERIPHERAL_ENABLE();
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_APB1_PHERIPHERAL_ENABLE(uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	switch(_PERIPHERAL)
+	{
+		case TIM2_PERIPHERAL:
+			RET = TIM2_PERIPHERAL_ENABLE();
+			break;
+
+		case TIM3_PERIPHERAL:
+			RET = TIM3_PERIPHERAL_ENABLE();
+			break;
+
+		case TIM4_PERIPHERAL:
+			RET = TIM4_PERIPHERAL_ENABLE();
+			break;
+
+		case TIM5_PERIPHERAL:
+			RET = WWDG_PERIPHERAL_ENABLE();
+			break;
+
+		case WWDG_PERIPHERAL:
+			RET = TIM2_PERIPHERAL_ENABLE();
+			break;
+
+		case SPI2_PERIPHERAL:
+			RET = SPI2_PERIPHERAL_ENABLE();
+			break;
+
+		case SPI3_PERIPHERAL:
+			RET = SPI3_PERIPHERAL_ENABLE();
+			break;
+
+		case USART2_PERIPHERAL:
+			RET = USART2_PERIPHERAL_ENABLE();
+			break;
+
+		case I2C1_PERIPHERAL:
+			RET = I2C1_PERIPHERAL_ENABLE();
+			break;
+
+		case I2C2_PERIPHERAL:
+			RET = I2C2_PERIPHERAL_ENABLE();
+			break;
+
+		case I2C3_PERIPHERAL:
+			RET = I2C3_PERIPHERAL_ENABLE();
+			break;
+
+		case PWR_PERIPHERAL:
+			RET = PWR_PERIPHERAL_ENABLE();
+			break;
+
+		default:
+			RET = E_NOK;
+			break;
+	}
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_APB2_PHERIPHERAL_ENABLE(uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	switch(_PERIPHERAL)
+	{
+		case TIM1_PERIPHERAL:
+			RET = TIM1_PERIPHERAL_ENABLE();
+			break;
+
+		case USART1_PERIPHERAL:
+			RET = USART1_PERIPHERAL_ENABLE();
+			break;
+
+		case USART6_PERIPHERAL:
+			RET = USART6_PERIPHERAL_ENABLE();
+			break;
+
+		case ADC1_PERIPHERAL:
+			RET = ADC1_PERIPHERAL_ENABLE();
+			break;
+
+		case SDIO_PERIPHERAL:
+			RET = SDIO_PERIPHERAL_ENABLE();
+			break;
+
+		case SPI1_PERIPHERAL:
+			RET = SPI1_PERIPHERAL_ENABLE();
+			break;
+
+		case SPI4_PERIPHERAL:
+			RET = SPI4_PERIPHERAL_ENABLE();
+			break;
+
+		case SYSCFG_PERIPHERAL:
+			RET = SYSCFG_PERIPHERAL_ENABLE();
+			break;
+
+		case TIM9_PERIPHERAL:
+			RET = TIM9_PERIPHERAL_ENABLE();
+			break;
+
+		case TIM10_PERIPHERAL:
+			RET = TIM10_PERIPHERAL_ENABLE();
+			break;
+
+		case TIM11_PERIPHERAL:
+			RET = TIM11_PERIPHERAL_ENABLE();
+			break;
+
+		default:
+			RET = E_NOK;
+			break;
+	}
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_AHB1_PHERIPHERAL_DISABLE(uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	switch(_PERIPHERAL)
+	{
+		case GPIOA_PERIPHERAL:
+			RET = GPIOA_PERIPHERAL_DISABLE();
+			break;
+
+		case GPIOB_PERIPHERAL:
+			RET = GPIOB_PERIPHERAL_DISABLE();
+			break;
+
+		case GPIOC_PERIPHERAL:
+			RET = GPIOC_PERIPHERAL_DISABLE();
+			break;
+
+		case GPIOD_PERIPHERAL:
+			RET = GPIOD_PERIPHERAL_DISABLE();
+			break;
+
+		case GPIOE_PERIPHERAL:
+			RET = GPIOE_PERIPHERAL_DISABLE();
+			break;
+
+		case GPIOH_PERIPHERAL:
+			RET = GPIOH_PERIPHERAL_DISABLE();
+			break;
+
+		case CRC_PERIPHERAL:
+			RET = CRC_PERIPHERAL_DISABLE();
+			break;
+
+		case DMA1_PERIPHERAL:
+			RET = DMA1_PERIPHERAL_DISABLE();
+			break;
+
+		case DMA2_PERIPHERAL:
+			RET = DMA2_PERIPHERAL_DISABLE();
+			break;
+
+		default:
+			RET = E_NOK;
+			break;
+	}
+
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_AHB2_PHERIPHERAL_DISABLE(uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	RET = OTGFS_PERIPHERAL_DISABLE();
+
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_APB1_PHERIPHERAL_DISABLE(uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	switch(_PERIPHERAL)
+	{
+		case TIM2_PERIPHERAL:
+			RET = TIM2_PERIPHERAL_DISABLE() ;
+			break;
+
+		case TIM3_PERIPHERAL:
+			RET = TIM3_PERIPHERAL_DISABLE() ;
+			break;
+
+		case TIM4_PERIPHERAL:
+			RET = TIM4_PERIPHERAL_DISABLE() ;
+			break;
+
+		case TIM5_PERIPHERAL:
+			RET = TIM5_PERIPHERAL_DISABLE() ;
+			break;
+
+		case WWDG_PERIPHERAL:
+			RET = WWDG_PERIPHERAL_DISABLE() ;
+			break;
+
+		case SPI2_PERIPHERAL:
+			RET = SPI2_PERIPHERAL_DISABLE() ;
+			break;
+
+		case SPI3_PERIPHERAL:
+			RET = SPI3_PERIPHERAL_DISABLE() ;
+			break;
+
+		case USART2_PERIPHERAL:
+			RET = USART2_PERIPHERAL_DISABLE() ;
+			break;
+
+		case I2C1_PERIPHERAL:
+			RET = I2C1_PERIPHERAL_DISABLE() ;
+			break;
+
+		case I2C2_PERIPHERAL:
+			RET = I2C2_PERIPHERAL_DISABLE() ;
+			break;
+
+		case I2C3_PERIPHERAL:
+			RET = I2C3_PERIPHERAL_DISABLE() ;
+			break;
+
+		case PWR_PERIPHERAL:
+			RET = PWR_PERIPHERAL_DISABLE() ;
+			break;
+
+		default:
+			RET = E_NOK;
+			break;
+	}
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_APB2_PHERIPHERAL_DISABLE(uint32 _PERIPHERAL)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	switch(_PERIPHERAL)
+	{
+		case TIM1_PERIPHERAL:
+			RET = TIM1_PERIPHERAL_DISABLE();
+			break;
+
+		case USART1_PERIPHERAL:
+			RET = USART1_PERIPHERAL_DISABLE();
+			break;
+
+		case USART6_PERIPHERAL:
+			RET = USART6_PERIPHERAL_DISABLE();
+			break;
+
+		case ADC1_PERIPHERAL:
+			RET = ADC1_PERIPHERAL_DISABLE();
+			break;
+
+		case SDIO_PERIPHERAL:
+			RET = SDIO_PERIPHERAL_DISABLE();
+			break;
+
+		case SPI1_PERIPHERAL:
+			RET = SPI1_PERIPHERAL_DISABLE();
+			break;
+
+		case SPI4_PERIPHERAL:
+			RET = SPI4_PERIPHERAL_DISABLE();
+			break;
+
+		case SYSCFG_PERIPHERAL:
+			RET = SYSCFG_PERIPHERAL_DISABLE();
+			break;
+
+		case TIM9_PERIPHERAL:
+			RET = TIM9_PERIPHERAL_DISABLE();
+			break;
+
+		case TIM10_PERIPHERAL:
+			RET = TIM10_PERIPHERAL_DISABLE();
+			break;
+
+		case TIM11_PERIPHERAL:
+			RET = TIM11_PERIPHERAL_DISABLE();
+			break;
+
+		default:
+			RET = E_NOK;
+			break;
+	}
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_HSI_INTIALIZE(void)
+{
+	STD_RETURN_TYPES RET = E_OK;
+	  /*ENABLE HSI*/
+		SET_BIT((RCC_REG-> RCC_CR),(RCC_CR_HSION));
+		while(!READ_BIT((RCC_REG-> RCC_CR),RCC_CR_HSION_HSIRDY));
+
+	 /*SELECT SYSTEM CLOCK WITH HSI CLOCK*/
+		(RCC_REG ->RCC_CFGR) &= ~(1<<SW_0);
+		(RCC_REG ->RCC_CFGR) &= ~(1<<SW_1);
+
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_HSE_INTIALIZE(void)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	/* SELECT THE SOURCE OF THE HSE*/
+	#if HSE_SOURCE ==  CRYSTAL_HSE_CLK_SRC
+		CLEAR_BIT((RCC_REG->RCC_CR), RCC_HSEBYP);
+	#elif HSE_SOURCE == RC_HSE_CLK_SRC
+		RCC_REG->RCC_CR |= (1<< RCC_HSEBYP);
+	#else
+		RET = E_NOK;
+	#endif
+
+   /* ENABLE HSE COLCK*/
+		SET_BIT((RCC_REG->RCC_CR),RCC_HSEON);
+		while(!READ_BIT((RCC_REG->RCC_CR),RCC_HSERDY));
+
+   /*SELECT SYSTEM CLOCK WITH HSI CLOCK*/
+		(RCC_REG ->RCC_CFGR) |= (1<<SW_0);
+		(RCC_REG ->RCC_CFGR) &= ~(1<<SW_1);
+
+   /* DISABLE THE HSI*/
+	    (RCC_REG-> RCC_CR) &= ~(1<<RCC_CR_HSION);
+
+	return(RET);
+}
+
+static STD_RETURN_TYPES RCC_PLL_INTIALIZE(void)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	#if PLL_SRC == PLL_HSI_CLK_SRC
+	/*ENABLE HSI*/
+	(RCC_REG -> RCC_CR) |= (1 <<RCC_CR_HSION);
+	while(!READ_BIT((RCC_REG -> RCC_CR),RCC_CR_HSION_HSIRDY));
+
+	/*ENABLE PLL*/
+	(RCC_REG -> RCC_CR) |= (1 << PLL_PLLON);
+	while(!READ_BIT((RCC_REG -> RCC_CR),pllPLLRDY));
+
+	/*ENABLE PLL CONGIURATION AS HSI*/
+	(RCC_REG ->RCC_PLLCFGR) &= ~(1 <<PLLSRC);
+
+	/*SW SELECT*/
+	(RCC_REG ->RCC_CFGR) |= (1<<SW_1);
+	(RCC_REG ->RCC_CFGR) &= ~(1<<SW_0);
+
+	#elif PLL_SRC == PLL_HSE_CLK_SRC
+
+	/*ENABLE HSI*/
+	(RCC_REG -> RCC_CR) |= (1 <<RCC_HSEON );
+	while(!READ_BIT((RCC_REG -> RCC_CR),RCC_HSERDY));
+
+	/*ENABLE PLL*/
+	(RCC_REG -> RCC_CR) |= (1 << PLL_PLLON);
+	while(!READ_BIT((RCC_REG -> RCC_CR),pllPLLRDY));
+
+	/*ENABLE PLL CONGIURATION AS HSI*/
+	(RCC_REG ->RCC_PLLCFGR) |= (1 <<PLLSRC);
+
+	/*SW SELECT*/
+	(RCC_REG ->RCC_CFGR) |= (1<<SW_1);
+	(RCC_REG ->RCC_CFGR) &= ~(1<<SW_0);
+	#else
+		RET = E_NOK;
+	#endif
+
+	return(RET);
+}
+
+/*********************************** FUNCTION DEFINATION END    ***********************************************************/

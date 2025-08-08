@@ -1,0 +1,4 @@
+BUZZER_programm.c:12:18:BUZZER_INTIATIAZE	8	static
+BUZZER_programm.c:40:18:BUZZER_TURN_ON	0	static
+BUZZER_programm.c:53:18:BUZZER_TURN_OFF	0	static
+BUZZER_programm.c:66:18:BUZZER_TOGGLE	0	static

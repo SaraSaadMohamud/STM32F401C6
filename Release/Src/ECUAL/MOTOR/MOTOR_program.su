@@ -1,0 +1,4 @@
+MOTOR_program.c:11:18:DC_MOTOR_INTIALIZE	16	static
+MOTOR_program.c:42:18:DC_MOTOR_TURN_RIGHT	8	static
+MOTOR_program.c:56:18:DC_MOTOR_TURN_LEFT	8	static
+MOTOR_program.c:70:18:DC_MOTOR_TURN_OFF	8	static

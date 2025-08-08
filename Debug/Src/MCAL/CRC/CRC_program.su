@@ -1,0 +1,3 @@
+CRC_program.c:11:12:CRC_INIT	16	static
+CRC_program.c:19:12:CRC_RESET	16	static
+CRC_program.c:27:12:CRC_CALCULAT	32	static

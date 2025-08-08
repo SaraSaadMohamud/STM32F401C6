@@ -1,0 +1,220 @@
+/*
+ ******************************************************************************
+ * @file           : SYSTICK_program.c
+ * @author         : SARA SAAD MAHMOUD
+ * @brief          : SYSTICK program body
+ ******************************************************************************
+*/
+/************************** INCLUDE PART **********************************/
+#include "MACL/SYSTICK/SYSTICK_interface.h"
+
+/************************** INCLUDE PART **********************************/
+void (*SYS_CALLBACK)(void);
+static volatile SYS_option = SYS_PERIODIC_TICK;
+
+/************************* FUNCTION DEFINITION *******************************/
+
+STD_RETURN_TYPES SYSTICK_INIT(uint32 SYS_TIME)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	/*DISABLE SYSTICK */
+	CLEAR_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_ENABLE);
+
+	/*SELECT SYSTICK WITH SYSTIME */
+	RET =  SYSTICK_SET_LOAD_REG(SYS_TIME);
+
+	/*SELECT THE SYSTICK CLOCK SOURCE*/
+	RET = SYSTICK_SELECT_CLK();
+
+	/*DISABLE THE INTERRUPT FETURE*/
+	CLEAR_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_INT_ENABLE);
+
+	return(RET);
+}
+
+STD_RETURN_TYPES SYSTICK_DE_INIT(void)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	/*DISABLE SYSTICK*/
+	CLEAR_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_ENABLE);
+	/*RESET RELOAD REGISTER*/
+	SYSTICK_REG ->STK_LOAD = (uint32)(0);
+	/*RESET VALUE REGISTER*/
+	SYSTICK_REG ->STK_VAL = (uint32)(0);
+	/*DISABLE IRQ FOR SYSTICK*/
+	CLEAR_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_INT_ENABLE);
+
+	return(RET);
+}
+
+STD_RETURN_TYPES SYSTICK_SELECT_CLK(void)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+#if SYSTICK_CLK_SRC == SYSTICK_AHB_DIV8_CLOCK
+			CLEAR_BIT((SYSTICK_REG ->STK_CTRL), SYSTICK_CTRL_CLK_SRC);
+#elif SYSTICK_CLK_SRC == SYSTICK_AHB_DIV1_CLOCK
+			SET_BIT((SYSTICK_REG ->STK_CTRL), SYSTICK_CTRL_CLK_SRC);
+#else
+			RET =E_NOK;
+#endif
+
+	return(RET);
+}
+
+
+STD_RETURN_TYPES  SYSTICK_SET_LOAD_REG(uint32 SYS_TIME)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	if(SYS_MAX_VALUE < SYS_TIME)
+	{
+		RET = E_NOK;
+	}
+	else
+	{
+		SYSTICK_REG ->STK_LOAD = (uint32)(SYS_TIME);
+		//SYSTICK_REG ->STK_VAL = (uint32)(0);
+	}
+
+	return(RET);
+}
+
+STD_RETURN_TYPES SYSTICK_GET_REMAINIG_TIME(uint32 *time)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	if(NULL == time)
+	{
+		RET = E_NOK;
+
+	}
+	else
+	{
+		*time = (SYSTICK_REG ->STK_VAL);
+	}
+
+	return(RET);
+}
+
+STD_RETURN_TYPES SYSTICK_GET_ELAPSED_TIME(uint32 *time)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	if(NULL == time)
+	{
+		RET = E_NOK;
+
+	}
+	else
+	{
+		*time =( (SYSTICK_REG ->STK_LOAD) - (SYSTICK_REG ->STK_VAL) );
+	}
+
+	return(RET);
+}
+
+STD_RETURN_TYPES SYSTICK_SET_WAITING_TIME(uint32 SYS_TIME)
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	if(SYS_MAX_VALUE < SYS_TIME)
+	{
+		RET = E_NOK;
+	}
+	else
+	{
+		/* SET RELOAD REGISTER WITH THE SYSTIME*/
+		RET = SYSTICK_SET_LOAD_REG(SYS_TIME);
+
+		RET = SYSTICK_SELECT_CLK();
+
+		/*ENABLE TO THE SYSTICK*/
+		SET_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_ENABLE);
+
+		/* WAIT SYSTICK FLAG  TO SET MENTION TO THE SYSTIME WAS DONE*/
+		while(READ_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_CONFG));
+
+		/*DISABLE THE SYSTICK*/
+		RET = SYSTICK_DE_INIT();
+	}
+
+	return(RET);
+}
+
+STD_RETURN_TYPES SYSTICK_SET_INTERVAL_PRIODIC(uint32 SYS_TIME,void(*pf)(void))
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	if((NULL == pf) || (SYS_MAX_VALUE < SYS_TIME))
+	{
+		RET = E_NOK;
+
+	}
+	else
+	{
+		/* SET RELOAD REGISTER WITH THE SYSTIME*/
+		SYSTICK_SET_LOAD_REG(SYS_TIME);
+
+		/* LOAD THE ISR ADRESS */
+		SYS_CALLBACK = pf;
+
+		/* SELECT PERIODIC SYSTIME OPTION*/
+		SYS_option = SYS_PERIODIC_TICK;
+
+		/*ENABLE SYSTICK IRQ */
+		SET_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_INT_ENABLE);
+
+		/*ENABLE SYSTICK*/
+		SET_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_ENABLE );
+	}
+
+	return(RET);
+}
+
+STD_RETURN_TYPES SYSTICK_SET_INTERVAL_SINGLE(uint32 SYS_TIME,void(*pf)(void))
+{
+	STD_RETURN_TYPES RET = E_OK;
+
+	if((NULL == pf) || (SYS_MAX_VALUE < SYS_TIME))
+	{
+		RET = E_NOK;
+
+	}
+	else
+	{
+		/* SET RELOAD REGISTER WITH THE SYSTIME*/
+		SYSTICK_SET_LOAD_REG(SYS_TIME);
+
+		/* LOAD THE ISR ADRESS */
+		SYS_CALLBACK = pf;
+
+		/* SELECT PERIODIC SYSTIME OPTION*/
+		SYS_option = SYS_SINGLE_TICK;
+
+		/*ENABLE SYSTICK IRQ */
+		SET_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_INT_ENABLE);
+
+		/*ENABLE SYSTICK*/
+		SET_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_ENABLE );
+	}
+
+	return(RET);
+}
+
+void SysTick_Handler(void)
+{
+	if(SYS_option == SYS_SINGLE_TICK)
+	{
+		 SYSTICK_DE_INIT();
+	}
+	/* JUMP TO EXECUTE ISR*/
+	SYS_CALLBACK();
+
+	/* RESET THE SYSTIC FLAG*/
+	READ_BIT((SYSTICK_REG ->STK_CTRL),SYSTICK_CTRL_CONFG );
+}
+
+/************************* FUNCTION DEFINITION *******************************/
